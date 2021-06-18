@@ -6,6 +6,7 @@ import "./Home.css";
 import { API } from "aws-amplify";
 import { BsPencilSquare } from "react-icons/bs";
 import { LinkContainer } from "react-router-bootstrap";
+import { Auth } from "aws-amplify";
 
 export default function Home() {
   const [notes, setNotes] = useState([]);
@@ -31,8 +32,18 @@ export default function Home() {
     onLoad();
   }, [isAuthenticated]);
   
-  function loadNotes() {
-    return API.get("todos", "todos");
+  async function loadNotes() {
+    console.log("usao");
+    const userPoolUser = await Auth.currentUserPoolUser();
+    console.log(userPoolUser.username );
+
+    console.log(JSON.stringify(userPoolUser) );
+
+    return API.get("todos", "todos", {
+      queryStringParameters: {
+        userId: userPoolUser.username,
+      }
+    });
   }
 
   function renderNotesList(notes) {

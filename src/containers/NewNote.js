@@ -7,6 +7,7 @@ import config from "../config";
 import "./NewNote.css";
 import { s3Upload } from "../libs/awsLib";
 import { API } from "aws-amplify";
+import { Auth } from "aws-amplify";
 
 export default function NewNote() {
   const file = useRef(null);
@@ -38,8 +39,10 @@ export default function NewNote() {
   
     try {
       const attachment = file.current ? await s3Upload(file.current) : null;
-  
-      await createNote({ text: content, image: attachment });
+      var userPoolUser = await Auth.currentUserPoolUser();
+      userPoolUser = userPoolUser.username;
+      await createNote({ text: content, image: attachment, userId: userPoolUser
+      });
       history.push("/");
     } catch (e) {
       onError(e);
