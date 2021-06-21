@@ -9,6 +9,7 @@ import Notes from "./containers/Notes";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 import Settings from "./containers/Settings";
+import Profile from "./containers/Profile";
 
 export default function Routes() {
   return (
@@ -19,6 +20,7 @@ export default function Routes() {
         <AuthenticatedRoute exact path="/notes/new" component={NewNote}/>
         <AuthenticatedRoute exact path="/notes/:id" component={Notes}/>
         <AuthenticatedRoute exact path="/settings" component={Settings}/>
+        <AuthenticatedRoute exact path="/profile" component={Profile}/>
         <Route component={NotFound}/>
     </Switch>
   );

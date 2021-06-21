@@ -14,6 +14,9 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
     confirmationCode: "",
+    nickname: "",
+    name: "",
+    phone_number: ""
   });
   const history = useHistory();
   const [newUser, setNewUser] = useState(null);
@@ -41,6 +44,11 @@ export default function Signup() {
       const newUser = await Auth.signUp({
         username: fields.email,
         password: fields.password,
+        attributes: {
+          nickname: fields.nickname,
+          name: fields.name,
+          phone_number: fields.phone_number
+        }
       });
       setIsLoading(false);
       setNewUser(newUser);
@@ -98,7 +106,7 @@ export default function Signup() {
     return (
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="email" size="lg">
-          <Form.Label>Email</Form.Label>
+          <Form.Label>Email*</Form.Label>
           <Form.Control
             autoFocus
             type="email"
@@ -107,7 +115,7 @@ export default function Signup() {
           />
         </Form.Group>
         <Form.Group controlId="password" size="lg">
-          <Form.Label>Password</Form.Label>
+          <Form.Label>Password*</Form.Label>
           <Form.Control
             type="password"
             value={fields.password}
@@ -115,11 +123,38 @@ export default function Signup() {
           />
         </Form.Group>
         <Form.Group controlId="confirmPassword" size="lg">
-          <Form.Label>Confirm Password</Form.Label>
+          <Form.Label>Confirm Password*</Form.Label>
           <Form.Control
             type="password"
             onChange={handleFieldChange}
             value={fields.confirmPassword}
+          />
+        </Form.Group>
+        <Form.Group controlId="nickname" size="lg">
+          <Form.Label>Nickname</Form.Label>
+          <Form.Control
+            autoFocus
+            type="text"
+            value={fields.nickname}
+            onChange={handleFieldChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="name" size="lg">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            autoFocus
+            type="text"
+            value={fields.name}
+            onChange={handleFieldChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="phone_number" size="lg">
+          <Form.Label>Phone Number</Form.Label>
+          <Form.Control
+            autoFocus
+            type="text"
+            value={fields.phone_number}
+            onChange={handleFieldChange}
           />
         </Form.Group>
         <LoaderButton

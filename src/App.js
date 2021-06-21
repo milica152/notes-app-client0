@@ -57,6 +57,9 @@ function App() {
                   <LinkContainer to="/settings">
                     <Nav.Link>Settings</Nav.Link>
                   </LinkContainer>
+                  <LinkContainer to="/profile">
+                    <Nav.Link>Profile</Nav.Link>
+                  </LinkContainer>
                   <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                 </>
               ) : (
