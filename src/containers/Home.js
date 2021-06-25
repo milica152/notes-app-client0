@@ -33,11 +33,7 @@ export default function Home() {
   }, [isAuthenticated]);
   
   async function loadNotes() {
-    console.log("usao");
     const userPoolUser = await Auth.currentUserPoolUser();
-    console.log(userPoolUser.username );
-
-    console.log(JSON.stringify(userPoolUser) );
 
     return API.get("todos", "todos", {
       queryStringParameters: {

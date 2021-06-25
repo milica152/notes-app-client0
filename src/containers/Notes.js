@@ -7,6 +7,7 @@ import LoaderButton from "../components/LoaderButton";
 import config from "../config";
 import "./Notes.css";
 import { s3Upload } from "../libs/awsLib";
+import { Auth } from "aws-amplify";
 
 export default function Notes() {
   const file = useRef(null);
@@ -18,14 +19,20 @@ export default function Notes() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    function loadNote() {
-      return API.get("todos", `todos/${id}`);
+    async function loadNote() {
+      const userPoolUser = await Auth.currentUserPoolUser();
+      return API.get("todos", `todos/${id}`, {
+        queryStringParameters: {
+          userId: userPoolUser.username,
+        }
+      });
     }
     
 
     async function onLoad() {
       try {
-        const note = await loadNote();
+        const noteList = await loadNote();
+        const note = noteList[0];
         const { text, image } = note;
 
         if (image) {
@@ -54,7 +61,7 @@ export default function Notes() {
     file.current = event.target.files[0];
   }
 
-  function saveNote(note) {
+  async function saveNote(note) {
     return API.put("todos", `todos/${id}`, {
       body: note
     });
@@ -80,11 +87,13 @@ export default function Notes() {
       if (file.current) {
         attachment = await s3Upload(file.current);
       }
+      const userPoolUser = await Auth.currentUserPoolUser();
 
       await saveNote({
         text: content,
         image: attachment || note.image,
-        checked: note.checked
+        checked: note.checked,
+        userId: userPoolUser.username,
       });
       history.push("/");
     } catch (e) {
@@ -93,8 +102,13 @@ export default function Notes() {
     }
   }
   
-  function deleteNote() {
-    return API.del("todos", `/todos/${id}`);
+  async function deleteNote() {
+    const userPoolUser = await Auth.currentUserPoolUser();
+    return API.del("todos", `/todos/${id}`, {
+      queryStringParameters: {
+        userId: userPoolUser.username
+      }
+    });
   }
   
   async function handleDelete(event) {
