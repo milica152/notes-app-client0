@@ -104,11 +104,8 @@ export default function Notes() {
   
   async function deleteNote() {
     const userPoolUser = await Auth.currentUserPoolUser();
-    return API.del("todos", `/todos/${id}`, {
-      queryStringParameters: {
-        userId: userPoolUser.username
-      }
-    });
+    const userId = userPoolUser.username;
+    return API.del("todos", `/todos/${id}/${userId}`);
   }
   
   async function handleDelete(event) {
