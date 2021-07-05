@@ -33,13 +33,7 @@ export default function Home() {
   }, [isAuthenticated]);
   
   async function loadNotes() {
-    const userPoolUser = await Auth.currentUserPoolUser();
-
-    return API.get("todos", "todos", {
-      queryStringParameters: {
-        userId: userPoolUser.username,
-      }
-    });
+    return API.get("todos", "todos");
   }
 
   function renderNotesList(notes) {
