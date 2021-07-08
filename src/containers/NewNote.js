@@ -36,12 +36,11 @@ export default function NewNote() {
     }
   
     setIsLoading(true);
-  
+
     try {
       const attachment = file.current ? await s3Upload(file.current) : null;
-      var userPoolUser = await Auth.currentUserPoolUser();
-      userPoolUser = userPoolUser.username;
-      await createNote({ text: content, image: attachment
+      await createNote({
+        text: content, image: attachment
       });
       history.push("/");
     } catch (e) {
