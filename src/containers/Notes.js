@@ -20,12 +20,7 @@ export default function Notes() {
 
   useEffect(() => {
     async function loadNote() {
-      const userPoolUser = await Auth.currentUserPoolUser();
-      return API.get("todos", `todos/${id}`, {
-        queryStringParameters: {
-          userId: userPoolUser.username,
-        }
-      });
+      return API.get("todos", `todos/${id}`);
     }
     
 
@@ -87,13 +82,11 @@ export default function Notes() {
       if (file.current) {
         attachment = await s3Upload(file.current);
       }
-      const userPoolUser = await Auth.currentUserPoolUser();
 
       await saveNote({
         text: content,
         image: attachment || note.image,
         checked: note.checked,
-        userId: userPoolUser.username,
       });
       history.push("/");
     } catch (e) {
@@ -103,9 +96,7 @@ export default function Notes() {
   }
   
   async function deleteNote() {
-    const userPoolUser = await Auth.currentUserPoolUser();
-    const userId = userPoolUser.username;
-    return API.del("todos", `/todos/${id}/${userId}`);
+    return API.del("todos", `/todos/${id}`);
   }
   
   async function handleDelete(event) {
